@@ -1,0 +1,20 @@
+<% if jobs && jobs.length > 0 %>
+	<ul class="general-list jobs-list">
+		<% jobs.each do |job| %>
+			<% if !job.is_done? %>
+			<%= render :partial => 'jobs/list_item', :locals => {:job => job} %>
+			<% end %>
+		<% end %>
+	</ul>
+
+
+	<ul class="general-list jobs-list" style="margin-top:15px">
+		<% jobs.each do |job| %>
+			<% if job.is_done? %>
+			<%= render :partial => 'jobs/list_item', :locals => {:job => job} %>
+			<% end %>
+		<% end %>
+	</ul>	
+<% else %>
+	<center><%= no_job %></center>
+<% end %>

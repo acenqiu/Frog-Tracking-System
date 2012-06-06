@@ -1,0 +1,76 @@
+<ul class="breadcrumb">
+  <li>
+    <a href="<%= root_path %>">Home</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="<%= project_path @project %>"><%= @project.name %></a> <span class="divider">/</span>
+  </li>
+  <li>
+	<%= @version.version %>
+  </li>
+</ul>
+
+<div class="span9">
+	<div class="well row">
+		<a class="btn" href="<%= new_job_path :project_id => @project.id, :version_id => @version.id, :type => 'bug' %>">New issue</a>
+		<a class="btn" href="<%= new_job_path :project_id => @project.id, :version_id => @version.id %>">New feature</a>
+		<% unless @version.release_at %>
+			<a class="btn btn-success pull-right" href="#dlgRelease" data-toggle="modal">Release this version</a>
+		<% end %>
+	</div>
+	<%= render :partial => 'jobs/list', :locals => {:jobs => @jobs, :no_job => 'There is no job for this version.'} %>
+</div>
+
+<div class="span3">
+	<dl>
+		<dt>
+			Information
+			<% if @project.is_admin?(current_user) %>
+			(<a href="<%= edit_project_version_path @project, @version %>">Edit</a>,
+			<% if @project.current_version_id == @version.id %>Current Version
+			<% else %>
+				<a href="<%= set_cv_project_path @project %>?version_id=<%= @version.id %>">Set as CV.</a>
+			<% end %>)
+			<% end %>
+		</dt>
+		<dd>
+			<h3><%= @version.version %></h3>
+			<p><i><%= @version.start_at.to_s(:date) + ' ~ ' + @version.end_at.to_s(:date) %></i></p>
+			<p><%= @version.description %></p>
+		</dd>
+
+		<% closed = @version.jobs.closed.count %>
+		<% total = @version.jobs.count %>
+		<dt>Progress(<%= closed %>/<%= total %>)</dt>
+		<dd>
+			<div class="progress" style="margin-top: 5px">
+			  <div class="bar" style="width: <%= total > 0 ? closed*100/total : 0 %>%;"></div>
+			</div>
+		</dd>
+
+		<% if @version.release_at %>
+		<dt>Release Note</dt>
+		<dd>
+			<p>
+				<i>Released at <%= @version.release_at.to_s(:date) %></i><br/>
+				<pre><%= @version.release_note %></pre>
+			</p>
+		</dd>
+		<% end %>
+
+		<dt>Recent Closed</dt>
+		<dd>
+			<% if @recent_closed.length > 0 %>
+			<ul class="unstyled">
+				<% @recent_closed.each do |job| %>
+					<li><a href="<%= job_path job %>"><%= job.title %></a></li>
+				<% end %>
+			</ul>
+			<% else %>
+			<i>None</i>
+			<% end %>
+		</dd>
+	</dl>
+</div>
+
+<%= render :partial => 'dlg_release' %>

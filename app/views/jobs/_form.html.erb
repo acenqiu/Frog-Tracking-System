@@ -1,0 +1,68 @@
+<%= form_for @job, :html => { :class => "form-horizontal" } do |f| %>
+  <fieldset>
+    <legend><%= @job.is_bug? ? 'Submit new issue' : 'Submit new feature' %></legend>
+  	<%= f.hidden_field :project_id %>
+    <%= f.hidden_field :type %>
+
+    <div class="control-group">
+      <%= f.label :title, '*Title', :class => "control-label" %>
+      <div class="controls"><%= f.text_field :title %></div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :version_id, '*Version', :class => "control-label" %>
+      <div class="controls"><%= f.select :version_id, @project.get_versions_for_select %></div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :charge_id, '*Person in charge', :class => "control-label" %>
+      <div class="controls"><%= f.select :charge_id, @project.get_members_for_select %></div>
+    </div>
+    <div class="control-group">
+      <%= f.label :expected_time, '*Expected time', :class => "control-label" %>
+      <div class="controls">
+      	<div class="input-append"><%= f.text_field :expected_time %><span class="add-on">Hours</span></div>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :expected_start_at, '*Expected start at', :class => "control-label" %>
+      <div class="controls"><%= f.text_field :expected_start_at %></div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :tag_list, 'Tags', :class => "control-label" %>
+      <div class="controls"><%= f.text_field :tag_list %></div>
+    </div>  
+
+    <div class="control-group">
+      <%= f.label :priority, 'Priority', :class => "control-label" %>
+      <div class="controls">
+        <%= f.text_field :priority %>
+        <p class="help-block">1 is highest, 5 is lowest</p>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :description, 'Description：', :class => "control-label" %>
+      <div class="controls"><%= f.text_area :description, :rows => 4 %></div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Preconditions：</label>
+      <div class="controls">
+        <a href="#" class="btn">&nbsp;<i class="icon-plus"></i>&nbsp;Add&nbsp;</a>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Relavant Members：</label>
+      <div class="controls">
+        <a href="#" class="btn">&nbsp;<i class="icon-plus"></i>&nbsp;Add&nbsp;</a>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="form-actions">
+    <input type="submit" class="btn btn-primary span2" value="Create" />
+  </div>
+<% end %>

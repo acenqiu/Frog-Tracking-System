@@ -1,0 +1,2 @@
+module RelavantsHelper
+end

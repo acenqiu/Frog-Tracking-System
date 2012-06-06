@@ -1,0 +1,25 @@
+<ul class="breadcrumb">
+  <li>
+    <a href="<%= root_path %>">Home</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <%= @project.name %>
+  </li>
+</ul>
+
+<div class="span9">
+	<% if @current_version %>
+		<div class="well row">
+			<a class="btn" href="<%= new_job_path :project_id => @project.id, :version_id => @current_version.id, :type => 'bug' %>">New issue</a>
+			<a class="btn" href="<%= new_job_path :project_id => @project.id, :version_id => @current_version.id %>">New feature</a>
+			<% if @project.is_admin?(current_user) %>
+				<%= link_to 'Delete this project', @project, :confirm => 'Are you sure?',
+										:method => :delete, :class => 'btn btn-danger pull-right' %>
+			<% end %>
+		</div>
+	<% end %>
+
+	<%= render :partial => 'jobs/list', :locals => {:jobs => @jobs, :no_job => 'There is no job for this version.'} %>
+</div>
+
+<%= render :partial => 'sidebar', :locals => {:manage => true} %>

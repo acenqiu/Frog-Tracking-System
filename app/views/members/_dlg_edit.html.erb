@@ -1,0 +1,30 @@
+<div class="modal hide fade" id="dlgEdit" >
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3>Edit member</h3>
+  </div>
+  <%= form_for [@project, @member], :method => :put, :html => {:id => 'edit_member', :class => "form-horizontal" } do |f| %>
+  <div class="modal-body">
+			<div class="control-group">
+				<%= f.label :role, :class => "control-label" %>
+				<div class="controls"><%= f.select :role, Member::ROLE_ENUM, {} %></div>
+			</div>
+
+			<div class="control-group">
+				<%= f.label :position, :class => "control-label" %>
+				<div class="controls"><%= f.text_field :position %></div>
+			</div>
+
+			<div class="control-group">
+				<div class="controls">
+				  <label class="checkbox" for="member_should_audit">
+				  	<%= f.check_box :should_audit %> Should Audit
+				  </label>
+				</div>
+			</div>
+  </div>
+  <div class="modal-footer">
+		<input type="submit" class="btn btn-primary span2" value="Ok">
+  </div>
+  <% end %>
+</div>

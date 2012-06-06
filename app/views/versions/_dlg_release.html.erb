@@ -1,0 +1,14 @@
+<div class="modal hide fade" id="dlgRelease" >
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3>Release this version</h3>
+  </div>
+  <%= form_tag release_project_version_path(@project, @version) do %>
+	  <div class="modal-body">
+			<textarea name="release_note" style="width:98%" rows="10"><%= @change_log %></textarea>
+	  </div>
+	  <div class="modal-footer">
+			<input type="submit" class="btn btn-primary span2" value="Ok">
+	  </div>
+  <% end %>
+</div>

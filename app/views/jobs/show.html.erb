@@ -1,0 +1,145 @@
+<ul class="breadcrumb">
+  <li>
+    <a href="<%= root_path %>">Home</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="<%= project_path @project %>"><%= @project.name %></a> <span class="divider">/</span>
+  </li>
+  <li>
+  	<a href="<%= project_version_path @project, @version %>"><%= @version.version %></a> <span class="divider">/</span>
+  </li>
+  <li>
+  	<%= @job.title %>
+  </li>
+</ul>
+
+<div class="span9">
+  <div class="well row">
+    <% if @job.closed %>
+      <h2>This job is closed</h2>
+    <% end %>
+
+    <% unless @job.audit_period? || @job.closed || @job.charge != current_user %>
+    <div class="btn-group pull-left">
+      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        Status
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <% hash = get_status_hash @job %>
+        <% hash.each do |k, v| %>
+          <li><a href="#" onclick="show_reason('status', '<%= k %>')"><%= v %></a></li>
+        <% end %>
+      </ul>
+    </div>
+    <% end %>
+
+    <% if @job.audit_period? && i_can_audit?(@job) %>
+      <div class="btn-group pull-left">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+          Audit
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="#" onclick="show_reason('audit', 'pass')">Pass</a></li>
+          <li><a href="#" onclick="show_reason('audit', 'fail')">Fail</a></li>
+        </ul>
+      </div>
+    <% end %>
+
+    <% if !@job.closed && i_can_close?(@job) %>
+    <%= link_to 'Close this job', @job, :confirm => 'Are you sure?', :method => :delete,
+                :class => 'btn btn-danger pull-right', :style => 'margin-left:5px' %>
+    <% end %>
+  </div>
+
+  <div class="tags">
+    <a rel="tooltip" title="Version"><span class="label label-important"><%= @job.version.version %></span></a>
+    <a rel="tooltip" title="Type"><span class="label label-inverse"><%= @job.type_desc %></span></a>
+    <a rel="tooltip" title="Person in charge"><span class="label label-success"><%= @job.charge.username %></span></a>
+    <% @job.tags.each do |tag| %>
+    <a rel="tooltip" title="Tag"><span class="label label-info"><%= tag.name %></span></a>
+    <% end %>
+  </div>
+
+	<h2><%= @job.title %></h2>
+  <p><%= @job.description %></p>
+  <div class="comments" style="margin-top: 100px">
+    <div class="row-fluid margin-top-10">
+      <input type="text" class="span9" id="txtTimeline" placeholder="Leave a comment...">
+      <input type="button" class="btn span2" value="Submit" id="btnSend" onclick="sendTimeline()">
+    </div>
+    <div class="clearfix"></div>
+  </div>
+</div>
+
+<div class="span3">
+	<dl>
+    <dt>
+      Information
+    </dt>
+    <dd>
+      <p><strong>Created By: </strong><%= @job.user.username %></p>
+      <p>
+        <strong>Status: </strong><span class="label label-info"><%= @job.status_desc %></span>
+        <% if @job.is_delayed? %>
+          <span class="label label-warning">Delayed</span>
+        <% end %>
+      </p>
+    </dd>
+
+    <dt>Audit Results</dt>
+    <dd class="audits">
+      <p>
+        <table>
+          <tbody>
+            <% @audits.each do |audit| %>
+            <tr>
+              <td><%= audit.user.username %>: </td>
+              <td style="padding:2px">
+                <a rel="tooltip" title="<%= audit.is_fail? ? audit.note : '' %>">
+                  <span class="label <%= audit_label_class audit %>"><%= audit.result.upcase %></span>
+                </a>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </p>
+    </dd>
+
+    <dt>Change Logs</dt>
+    <dd>
+      <ul>
+        <% @job.change_logs.each do |change| %>
+          <li><%= change.get_description.html_safe %></li>
+        <% end %>
+        <li>Created by <i><%= @job.user.username %></i> at <i><%= @job.created_at.to_s(:date) %></i></li>
+      </ul>
+    </dd>
+  </dl>
+</div>
+
+<%= render :partial => 'dlg_reason' %>
+
+<script type="text/javascript">
+  $(function(){
+    $('dd.audits').tooltip({selector: "a[rel=tooltip]", placement: 'right'});
+    $('.tags').tooltip({selector: "a[rel=tooltip]"});
+  });
+
+  function show_reason(type, value){
+    var action = '<%= update_status_job_path @job %>';
+    if (type == 'audit'){
+      action = '<%= audit_job_path @job %>';
+    }
+    $("#edit_reason").attr('action', action);
+    $('#hdValue').val(value);
+
+    if (value == 'ongoing' || value == 'pass' || value == 'finished' || value == 'fixed'){
+      $("#edit_reason").submit();
+    } else {
+      $('#dlgReason').modal('show');  
+    }
+  }
+</script>

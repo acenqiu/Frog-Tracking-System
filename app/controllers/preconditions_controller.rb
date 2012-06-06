@@ -1,0 +1,2 @@
+class PreconditionsController < ApplicationController
+end

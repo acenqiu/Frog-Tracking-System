@@ -1,0 +1,62 @@
+<div class="span3">
+	<% show_mgr = manage && @project.is_admin?(current_user) %>
+
+	<dl>
+		<dt>
+			Information
+			<% if show_mgr %>
+			(<a href="<%= edit_project_path @project %>">Edit</a>)
+			<% end %>
+		</dt>
+		<dd>
+			<h3><%= @project.name %></h3>
+			<p><%= @project.description %></p>
+		
+			<% current_version = @project.current_version %>
+			<% if current_version %>
+				<p><strong>Current Version: </strong><%= current_version.version %></p>
+				<% closed = current_version.jobs.closed.count %>
+				<% total = current_version.jobs.count %>
+				<p>
+					<strong>Progress: </strong><%= closed %>/<%= total %>
+				</p>
+				<div class="progress">
+				  <div class="bar" style="width: <%= total > 0 ? closed*100/total : 0 %>%;"></div>
+				</div>
+			<% else %>
+				<p>No version now</p>
+			<% end %>
+		</dd>
+
+		<dt>
+			Members
+			<% if show_mgr %>
+			(<a href="<%= project_members_path @project %>">Manage</a>)
+			<% end %>
+		</dt>
+		<dd>
+			<ul class="unstyled">
+				<% @project.members.each do |member| %>
+					<li><a href="<%= user_path member.user %>"><%= member.user.username %> - <%= member.position %></a></li>
+				<% end %>
+			</ul>
+		</dd>
+
+		<dt>
+			Versions
+			<% if show_mgr %>
+			(<a href="<%= new_project_version_path @project %>">New</a>)
+			<% end %>
+		</dt>
+		<dd>
+			<ul class="unstyled">
+				<% @project.versions.each do |version| %>
+					<% unless version.new_record? %>
+						<li><a href="<%= project_version_path @project, version %>"><%= version.version %></a></li>
+					<% end %>
+				<% end %>
+			</ul>
+		</dd>
+
+	</dl>
+</div>

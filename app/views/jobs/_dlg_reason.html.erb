@@ -1,0 +1,15 @@
+<div class="modal hide fade" id="dlgReason" >
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3>Leave a reason</h3>
+  </div>
+  <%= form_tag '', :method => :post, :id => 'edit_reason' do %>
+	  <div class="modal-body">
+			<input type="hidden" id="hdValue" name="value">
+			<textarea name="reason" style="width:98%" rows="5"></textarea>
+	  </div>
+	  <div class="modal-footer">
+			<input type="submit" class="btn btn-primary span2" value="Ok">
+	  </div>
+  <% end %>
+</div>

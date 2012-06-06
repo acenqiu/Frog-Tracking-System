@@ -1,0 +1,56 @@
+<ul class="breadcrumb">
+  <li>
+    Home
+  </li>
+</ul>
+
+<div class="span9">
+	<ul class="nav nav-tabs">
+	  <li class="active"><a href="#jobs" data-toggle="tab">Todo</a></li>
+	  <li><a href="#audits" data-toggle="tab">To Audit</a></li>
+	</ul>
+
+	<div class="tab-content">
+		<div id="jobs" class="tab-pane active">
+			<%= render :partial => 'jobs/list', :locals => {:jobs => @jobs, :no_job => 'There is no job for today.'} %>
+		</div>
+
+		<div id="audits" class="tab-pane">
+			<%= render :partial => 'jobs/list', :locals => {:jobs => @audits, :no_job => 'There is no job need to be audited.'} %>
+		</div>
+	</div>
+</div>
+
+<div class="span3">
+	<dt>Progress</dt>
+	<dd>
+		<p>
+			Jobs: <%= @done_count %>/<%= @jobs.count %>
+		<p>
+		<div class="progress">
+		  <div class="bar" style="width: <%= @jobs.count > 0 ? @done_count*100/@jobs.count : 0 %>%;"></div>
+		</div>
+		<p>
+			Time: <%= @done_time/3600.0 %>/<%= @total_time/3600.0 %>
+		<p>
+		<div class="progress">
+		  <div class="bar" style="width: <%= @total_time > 0 ? @done_time*100/@total_time : 0 %>%;"></div>
+		</div>
+	</dd>
+	<dt>Relavant Projects</dt>
+	<dd>
+		<ul class="unstyled">
+			<% projects = current_user.relavant_projects %>
+			<% projects.each do |project| %>
+				<% version = project.current_version %>
+				<% if version %>
+				<li>
+				<a href="<%= project_version_path project, version %>"><%= project.name %> - <%= version.version %></a>
+				</li>
+				<% else %>
+					<li><a href="<%= project_path project %>"><%= project.name %></a></li>
+				<% end %>
+			<% end %>
+		</ul>
+	</dd>
+</div>

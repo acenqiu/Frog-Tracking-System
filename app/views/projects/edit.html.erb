@@ -1,0 +1,14 @@
+<ul class="breadcrumb">
+  <li>
+    <a href="<%= root_path %>">Home</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="<%= project_path @project %>"><%= @project.name %></a> <span class="divider">/</span>
+  </li>
+  <li>
+	Edit
+  </li>
+</ul>
+
+
+<%= render :partial => 'projects/form', :locals => {:type => :edit} %>

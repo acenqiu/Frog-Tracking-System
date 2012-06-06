@@ -1,0 +1,103 @@
+@import "base";
+
+@include color('green', $green);
+@include color('gray', $gray);
+@include color('dark-orange', $dark-orange);
+@include color('light-orange', $light-orange);
+@include color('light-gray', $light-gray);
+@include color('yellow', $yellow);
+
+
+.inline-block{
+	display: inline-block;
+	/*float:left;
+		display:block;*/
+}
+
+.margin-top-5{
+	margin-top: 5px;
+}
+
+.margin-top-10{
+	margin-top: 10px;
+}
+
+.margin-top-15{
+	margin-top: 15px;
+}
+
+.margin-left-10{
+	margin-left: 10px;
+}
+
+.clear-left-margin{
+	margin-left: 0;
+}
+
+.clear-margin{
+	margin: 0;
+}
+
+.center{
+	margin: 0 auto;
+}
+
+.full-width{
+	width: 100%;
+}
+
+.toolbar{
+	padding: 10px 0;
+	border-bottom: 1px solid #ddd;	
+}
+
+.page-content{
+	margin: 0 10px;
+}
+
+.align-right{
+	text-align: right;
+}
+.overflow-h{
+	overflow: hidden;
+}
+
+/*
+ * General-list
+ */
+.general-list {
+	color: $gray;
+	list-style: none;
+	margin: 0;
+	
+	li {
+		padding: 10px 0;
+		border-bottom: 1px solid #ddd;
+		overflow:hidden;
+		
+		h4{	
+			color: $gray;
+			font-size: 16px;
+			margin-bottom: 3px;
+			margin-top: 5px;
+		}
+		
+		p {
+			color: $light-gray;
+			margin-bottom: 0;
+			word-wrap:break-word;
+		}
+	}
+}
+
+.jobs-list {
+	@include pri(1, #e3faff);
+	@include pri(2, #e7faff);
+	@include pri(3, #ebfaff);
+	@include pri(4, #eefaff);
+	@include pri(5, #f3faff);
+
+	.closed {
+		background: #f3f3f3;
+	}
+}

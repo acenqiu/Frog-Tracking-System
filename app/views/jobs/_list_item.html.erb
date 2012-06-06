@@ -1,0 +1,31 @@
+<li class="<%= job.is_done? ? 'closed' : ('pri-' + job.priority.to_s) %>">
+	<p class="tags">
+		<div class="pull-left">
+			<% if @home %>
+				<span class="label label-important"><%= job.project.name %></span>
+			<% end %>
+			<span class="label label-important"><%= job.version.version %></span>
+			<span class="label label-inverse"><%= job.type_desc %></span>
+			<% unless @home %>
+				<span class="label label-success"><%= job.charge.username %></span>
+			<% end %>
+
+			<% job.tags.each do |tag| %>
+			<span class="label label-info"><%= tag.name %></span>
+			<% end %>
+		</div>
+		<div class="pull-right">
+			<% if job.is_delayed? %>
+			<span class="label label-warning">Delayed</span>
+			<% end %>
+			<span class="label label-info"><%= job.status_desc %></span>
+		</div>
+		<div class="clearfix"></div>
+	</p>
+	<h4><a href="<%= job_path job %>"><%= job.title %></a></h4>
+	<p>
+		Expected Time: <strong><%= job.expected_time / 3600.0 %> Hours</strong>&nbsp;&nbsp;
+		Expected Start At: <strong><%= job.expected_start_at.to_s(:date) %></strong>
+	<p>
+	<p><%= job.description %></p>
+</li>

@@ -1,0 +1,90 @@
+<ul class="breadcrumb">
+  <li>
+    <a href="<%= root_path %>">Home</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="<%= project_path @project %>"><%= @project.name %></a> <span class="divider">/</span>
+  </li>
+  <li>
+		Members
+  </li>
+</ul>
+
+	<% users = @project.get_non_members_for_select %>
+	<% if users.length > 0 %>
+		<%= form_for [@project, @member], :html => { :class => "well form-inline" } do |f| %>
+			<%= f.select :user_id, users %>
+			<%= f.select :role, Member::ROLE_ENUM, {}, :class => 'input-small' %>
+			<%= f.text_field :position, :placeholder => 'Position' %>
+		  <label class="checkbox" for="member_should_audit">
+		  	<%= f.check_box :should_audit %> Should Audit
+		  </label>
+		  <button type="submit" class="btn pull-right">Add</button>
+		<% end %>
+	<% else %>
+		<div class="alert alert-info">No any user can be added as a member.</div>
+	<% end %>
+
+	<div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Username</th>
+					<th>Email</th>
+					<th>Role</th>
+					<th>Position</th>
+					<th>Should Audit</th>
+					<th>Operation</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @members.each do |member| %>
+					<% unless member.new_record? %>
+					<tr>
+						<td><%= member.user.username %></td>
+						<td><%= member.user.email %></td>
+						<td><%= member.role %></td>
+						<td><%= member.position %></td>
+						<td><%= member.should_audit ? 'Yes' : 'No' %></td>
+						<td>
+							<% if current_user == @project.user %>
+								<a href="#dlgEdit" data-toggle="modal" onclick="edit(<%= member.id %>)">Edit</a>
+							<% end %>
+							<% if member.user != current_user && member.user != @project.user %>
+								<%= link_to 'Remove', [@project, member], :confirm => 'Are you sure?', :method => :delete %>
+							<% end %>
+						</td>
+					</tr>
+					<% end %>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+<%= render :partial => 'dlg_edit' %>
+
+<script type="text/javascript">
+	
+	var members = <%= members_to_json(@members).html_safe %>;
+
+	function edit(id){
+		member = findById(id);
+		if (member){
+			$('#edit_member').attr('action', '<%= project_members_path @project %>/'+id+'.json');
+			$('#edit_member #member_role').val(member.role);
+			$('#edit_member #member_position').val(member.position);
+			$('#edit_member #member_should_audit').prop('checked', member.should_audit);
+		}
+	}
+
+	function findById(id){
+		for (var i = members.length - 1; i >= 0; i--) {
+			if (members[i].id == id){
+				return members[i];
+			}
+		}
+		return null;
+	}
+</script>
