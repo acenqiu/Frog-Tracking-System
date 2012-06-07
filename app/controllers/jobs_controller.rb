@@ -15,6 +15,7 @@ class JobsController < ApplicationController
 		@job = @project.jobs.new
 		@job.version = @version
 		@job.type = Job::TYPE[params[:type] == 'bug' ? :bug : :feature]
+		@job.expected_start_at = Time.now
 	end
 
 	def create

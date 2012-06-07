@@ -26,7 +26,7 @@
     </div>
     <div class="control-group">
       <%= f.label :expected_start_at, '*Expected start at', :class => "control-label" %>
-      <div class="controls"><%= f.text_field :expected_start_at %></div>
+      <div class="controls"><%= f.text_field :expected_start_at, :value => prettify_time(@job.expected_start_at) %></div>
     </div>
 
     <div class="control-group">
